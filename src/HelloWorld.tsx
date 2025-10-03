@@ -13,10 +13,10 @@ import { z } from "zod";
 import { zColor } from "@remotion/zod-types";
 
 export const myCompSchema = z.object({
-  titleText: z.string(),
-  titleColor: zColor(),
-  logoColor1: zColor(),
-  logoColor2: zColor(),
+	titleText: z.string().describe("标题文字"),
+	titleColor: zColor().describe("标题颜色"),
+	logoColor1: zColor().describe("Logo颜色1"),
+	logoColor2: zColor().describe("Logo颜色2"),
 });
 
 export const HelloWorld: React.FC<z.infer<typeof myCompSchema>> = ({

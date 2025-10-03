@@ -3,13 +3,13 @@ import { Composition } from "remotion";
 import { HelloWorld, myCompSchema } from "./HelloWorld";
 import { Logo, myCompSchema2 } from "./HelloWorld/Logo";
 
-// Each <Composition> is an entry in the sidebar!
+// 每一个 <Composition> 都是侧边栏的一个可选项!
 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
       <Composition
-        // You can take the "id" to render a video:
+        // 你可以使用 "id" 来渲染一个视频:
         // npx remotion render HelloWorld
         id="HelloWorld"
         component={HelloWorld}
@@ -17,7 +17,7 @@ export const RemotionRoot: React.FC = () => {
         fps={30}
         width={1920}
         height={1080}
-        // You can override these props for each render:
+        // 你可以为每次渲染覆盖这些属性:
         // https://www.remotion.dev/docs/parametrized-rendering
         schema={myCompSchema}
         defaultProps={{
@@ -28,7 +28,7 @@ export const RemotionRoot: React.FC = () => {
         }}
       />
 
-      {/* Mount any React component to make it show up in the sidebar and work on it individually! */}
+      {/* 你可以挂载任何 React 组件，让它显示在侧边栏中，并单独进行处理! */}
       <Composition
         id="OnlyLogo"
         component={Logo}
