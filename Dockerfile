@@ -58,4 +58,4 @@ RUN npm install
 COPY . .
 
 # 5. Command to run
-CMD ["node", "-e", "require('http').createServer((req, res) => res.end('OK')).listen(7860)"]
+CMD ["npm", "run", "render"]
