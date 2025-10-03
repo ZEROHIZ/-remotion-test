@@ -1,11 +1,8 @@
-# 1. Start from a standard Node.js image
 FROM node:18-bullseye
 
-# 2. Install all system dependencies for Puppeteer (Chrome) and FFmpeg
+# Install system dependencies as root first
 RUN apt-get update && apt-get install -y \
-    # FFmpeg
     ffmpeg \
-    # Puppeteer dependencies
     ca-certificates \
     fonts-liberation \
     libasound2 \
@@ -42,20 +39,27 @@ RUN apt-get update && apt-get install -y \
     lsb-release \
     wget \
     xdg-utils \
-    # Chromium browser
     chromium \
-    # Clean up
     && rm -rf /var/lib/apt/lists/*
 
-# 3. Set up the environment for Puppeteer
-# We need to tell Puppeteer to use the Chromium we installed via apt-get
+# Now, create a non-root user that will own the files and run the app
+RUN useradd -m -u 1000 user
+USER user
+
+# Set the working directory in the user's home
+WORKDIR /home/user/app
+
+# Set Puppeteer env for this user
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
-# 4. Standard project setup
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
+# Copy package files and change their ownership to the new user
+COPY --chown=user package*.json ./
 
-# 5. Command to run
+# Run npm install AS THE NEW USER. This is the key fix.
+RUN npm install
+
+# Copy the rest of the app files, and change ownership
+COPY --chown=user . .
+
+# The CMD will now run as 'user', who has permission to write to node_modules
 CMD ["npm", "run", "render"]
