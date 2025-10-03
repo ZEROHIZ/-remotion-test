@@ -42,24 +42,24 @@ RUN apt-get update && apt-get install -y \
     chromium \
     && rm -rf /var/lib/apt/lists/*
 
-# Now, create a non-root user that will own the files and run the app
-RUN useradd -m -u 1000 user
-USER user
+# The base image has a 'node' user (UID 1000). We'll use that.
+# Set the working directory.
+WORKDIR /home/node/app
 
-# Set the working directory in the user's home
-WORKDIR /home/user/app
-
-# Set Puppeteer env for this user
+# Set Puppeteer env
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
-# Copy package files and change their ownership to the new user
-COPY --chown=user package*.json ./
+# Copy files and set ownership to the 'node' user.
+COPY --chown=node:node package*.json ./
 
-# Run npm install AS THE NEW USER. This is the key fix.
+# Switch to the non-root user 'node'
+USER node
+
+# Run npm install as the 'node' user.
 RUN npm install
 
-# Copy the rest of the app files, and change ownership
-COPY --chown=user . .
+# Copy the rest of the files. They will be owned by 'node' because we switched user.
+COPY . .
 
-# The CMD will now run as 'user', who has permission to write to node_modules
+# The CMD will run as 'node'
 CMD ["npm", "run", "render"]
