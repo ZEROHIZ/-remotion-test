@@ -58,4 +58,4 @@ RUN npm install
 COPY . .
 
 # 5. Command to run
-CMD ["/bin/bash"]
+CMD ["tail", "-f", "/dev/null"]
