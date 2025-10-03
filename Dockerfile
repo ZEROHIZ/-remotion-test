@@ -1,5 +1,5 @@
 # Use Remotion's official base image which includes Node, Puppeteer, and FFmpeg
-FROM remotion/player:latest
+FROM remotion/player:4.0.131
 
 # Set the working directory inside the container
 WORKDIR /app
