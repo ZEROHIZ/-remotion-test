@@ -42,26 +42,22 @@ RUN apt-get update && apt-get install -y \
     chromium \
     && rm -rf /var/lib/apt/lists/*
 
-# Set Puppeteer env, can be done early
+# Set Puppeteer env
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
-# Create the app directory AND set its ownership to the 'node' user.
-RUN mkdir -p /home/node/app && chown -R node:node /home/node/app
+# Set working directory. It will be created as root.
+WORKDIR /app
 
-# Set the working directory
-WORKDIR /home/node/app
+# Copy files AND set ownership in the same step. Do this as ROOT.
+COPY --chown=node:node . .
 
-# Switch to the non-root user 'node'
+# Now that all files are in place and have the correct ownership,
+# switch to the non-root user.
 USER node
 
-# Copy package files. They will be owned by 'node' automatically because we switched user.
-COPY package*.json ./
-
-# Run npm install as the 'node' user. This should now succeed.
+# Run npm install as the 'node' user.
+# This user now owns all the files and the directory, so it can write node_modules.
 RUN npm install
-
-# Copy the rest of the app files.
-COPY . .
 
 # The CMD will run as 'node'
 CMD ["npm", "run", "render"]
