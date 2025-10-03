@@ -46,7 +46,6 @@ RUN apt-get update && apt-get install -y \
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 # Create the app directory AND set its ownership to the 'node' user.
-# This is the key fix.
 RUN mkdir -p /home/node/app && chown -R node:node /home/node/app
 
 # Set the working directory
@@ -55,8 +54,7 @@ WORKDIR /home/node/app
 # Switch to the non-root user 'node'
 USER node
 
-# Now we are the 'node' user, inside a directory we own.
-# Copy package files. They will be owned by 'node' automatically.
+# Copy package files. They will be owned by 'node' automatically because we switched user.
 COPY package*.json ./
 
 # Run npm install as the 'node' user. This should now succeed.
