@@ -4,6 +4,7 @@ emoji: 🎬
 colorFrom: blue
 colorTo: green
 sdk: docker
+app_file: src/Root.tsx
 ---
 
 # Remotion Rendering Test
