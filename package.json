@@ -24,7 +24,7 @@
     "typescript": "5.8.2"
   },
   "scripts": {
-    "dev": "remotion studio",
+    "dev": "remotion studio --port 7860 --host 0.0.0.0",
     "build": "remotion bundle",
     "render": "remotion render HelloWorld",
     "upgrade": "remotion upgrade",
