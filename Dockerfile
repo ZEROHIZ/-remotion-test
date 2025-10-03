@@ -63,4 +63,4 @@ USER node
 RUN npm install
 
 # The CMD will run as 'node'
-CMD ["npm", "run", "render"]
+CMD ["npm", "run", "dev"]
